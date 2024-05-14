@@ -24,7 +24,7 @@ class BigramLanguageModel(nn.Module):
       next_token = torch.multinomial(probs, 1)
       #add the token to the generation
       idx = torch.concatenate((idx, next_token))
-    return idx.squeeze(1)
+    return idx
 
 if __name__ == "__main__":
     from Data import Data
