@@ -1,0 +1,8 @@
+-  Adaptation to lightning
+	 - Data loader
+	 - Record metric during training
+- ecriture READMe.md
+	- presentation rapide architecture
+	- impact ajout Tokenizer avec Bite Pair Encoding
+- Ajout mixture of expert
+- Incorporation ML Flow 

@@ -23,8 +23,8 @@ class BigramLanguageModel(nn.Module):
       #select the token using proba
       next_token = torch.multinomial(probs, 1)
       #add the token to the generation
-      idx = torch.concatenate((idx, next_token))
-    return idx
+      idx = torch.cat((idx, next_token))
+    return idx.squeeze(1)
 
 if __name__ == "__main__":
     from Data import Data
@@ -32,9 +32,9 @@ if __name__ == "__main__":
     tokenizer = data.tokenizer
     
     m = BigramLanguageModel(tokenizer.vocab_size())
-    print(Loss.estimate_loss(m, data))
     
     idx = torch.zeros((1,1), dtype = torch.int64)
     gen_token = m.generate(idx, 100)
+    print(gen_token)
     gen_text = tokenizer.decode(gen_token)
     print(gen_text)
