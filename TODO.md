@@ -1,8 +1,13 @@
--  Adaptation to lightning
-	 - Data loader
-	 - Record metric during training
+## Objectifs :
+- Adaptation to lightning
+	- Data loader :heavy_check_mark:
+	- Passer les models sous lightning
+	 	- Bigram
+		- Transformer
+	- Record metric during training
+- Training GPU
 - ecriture READMe.md
 	- presentation rapide architecture
 	- impact ajout Tokenizer avec Bite Pair Encoding
+- Document code
 - Ajout mixture of expert
-- Incorporation ML Flow 

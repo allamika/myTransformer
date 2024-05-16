@@ -1,8 +1,25 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+import lightning as L
 
 import Loss
+
+class LBigramLanguageModel(L.LightningModule):
+  def __init__(self, bigram):
+    super().__init__()
+    self.bigram = bigram
+
+  def training_step(self, batch):
+    x,y = batch
+    out = self.bigram(x)
+    loss = Loss.eval_loss(out, y)
+
+    return loss
+
+  def configure_optimizers(self):
+    optimizer = torch.optim.AdamW(m.parameters(), lr=1e-3)
+    return optimizer
 
 class BigramLanguageModel(nn.Module):
 
@@ -35,6 +52,11 @@ if __name__ == "__main__":
     
     idx = torch.zeros((1,1), dtype = torch.int64)
     gen_token = m.generate(idx, 100)
-    print(gen_token)
     gen_text = tokenizer.decode(gen_token)
     print(gen_text)
+
+    dataLoader = data.getDataLoader(8)
+
+    lm = LBigramLanguageModel(m)
+    trainer = L.Trainer(max_epochs=10, accelerator="auto", devices="auto")
+    trainer.fit(model=lm, train_dataloaders=dataLoader)

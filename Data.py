@@ -11,6 +11,7 @@ class Data():
         print("---Data loading---")
         with open('input.txt', 'r', encoding='utf-8') as f:
             text = f.read()
+            text = text[:int(len(text)*0.1)]
             
         self.tokenizer = BasicTextTokenizer(text, bite_pair_encoding)
         
