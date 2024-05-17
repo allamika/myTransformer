@@ -14,6 +14,14 @@ class LiLanguageModel(L.LightningModule):
     loss = Loss.eval_loss(out, y)
 
     return loss
+  
+  def test_step(self, batch):
+    x,y = batch
+    out = self.LM(x)
+    test_loss = Loss.eval_loss(out, y)
+    self.log("test-loss", test_loss)
+
+
 
   def configure_optimizers(self):
     optimizer = torch.optim.AdamW(self.LM.parameters(), lr=1e-3)
@@ -27,10 +35,11 @@ if __name__  == "__main__":
     data = Data()
     tokenizer = data.tokenizer
     block_size = 8
-    dataLoader = data.getDataLoader(block_size)
+    dataLoaderTrain, dataLoaderTest = data.getDataLoaders(block_size,cut=0.1)
 
     lm = DecoderTransformer(tokenizer.vocab_size(), block_size)
 
     lilm = LiLanguageModel(lm)
     trainer = L.Trainer(max_epochs=1, accelerator="auto", devices="auto")
-    trainer.fit(model=lilm, train_dataloaders=dataLoader)
+    trainer.test(lilm,dataloaders=dataLoaderTest)
+    trainer.fit(model=lilm, train_dataloaders=dataLoaderTrain)

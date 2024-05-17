@@ -4,12 +4,12 @@
 	- Passer les models sous lightning :heavy_check_mark:
 	 	- Bigram :heavy_check_mark:
 		- Transformer :heavy_check_mark:
-		- generic lightning trainer :heavy_check_mark: 
-	- train and test
-	- Record metric during training
+		- generic lightning trainer :heavy_check_mark:
+	- train and test split :heavy_check_mark:
+	- Record metric during training :black_square_button:
 - Training GPU :heavy_check_mark:
-- ecriture READMe.md
-	- presentation rapide architecture
-	- impact ajout Tokenizer avec Bite Pair Encoding
-- Document code
-- Ajout mixture of expert
+- ecriture READMe.md :black_square_button:
+	- presentation rapide architecture :black_square_button:
+	- impact ajout Tokenizer avec Bite Pair Encoding :black_square_button:
+- Document code :black_square_button:
+- Ajout mixture of expert :black_square_button:
