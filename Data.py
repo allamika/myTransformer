@@ -21,10 +21,10 @@ class Data():
         self.train_data = self.data[:n]
         self.test_data = self.data[n:]
 
-    def getDataLoader(self, block_size,  ratio = 0.9):
+    def getDataLoader(self, block_size,  ratio = 0.9, cut=1):
         print("---Creating DataLoader---")
-        data = [(self.data[i:i+block_size], self.data[i+1:i+block_size+1]) for i in tqdm(range(len(self.data)-block_size-1))]
-        return DataLoader(data)
+        data = [(self.data[i:i+block_size], self.data[i+1:i+block_size+1]) for i in tqdm(range(int(len(self.data)*cut)-block_size-1))]
+        return DataLoader(data) #, num_workers=4, persistent_workers=True
     
     def get_batch(self, data, batch_size, block_size):
         if data == "train": data = self.train_data

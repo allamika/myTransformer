@@ -1,11 +1,13 @@
 ## Objectifs :
 - Adaptation to lightning
 	- Data loader :heavy_check_mark:
-	- Passer les models sous lightning
-	 	- Bigram
-		- Transformer
+	- Passer les models sous lightning :heavy_check_mark:
+	 	- Bigram :heavy_check_mark:
+		- Transformer :heavy_check_mark:
+		- generic lightning trainer :heavy_check_mark: 
+	- train and test
 	- Record metric during training
-- Training GPU
+- Training GPU :heavy_check_mark:
 - ecriture READMe.md
 	- presentation rapide architecture
 	- impact ajout Tokenizer avec Bite Pair Encoding

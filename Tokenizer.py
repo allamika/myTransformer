@@ -10,10 +10,11 @@ class BasicTextTokenizer():
     self.to_decode_ct = {id: token for id, token in enumerate(list_token)}
     print("---Bite Pair Encoding---")
     self.reduction(text, num_reduction)
+    self.size = len(self.to_decode_ct) + num_reduction
     
   def reduction(self, text, num_reduction):
     base_tokenized_text = [self.to_encode_ct[l] for l in text]
-    total_token = self.size()
+    total_token = len(self.to_decode_ct)
     _, self.reduction_rules = bite_pair_encoding(base_tokenized_text , num_reduction, total_token)
 
 
@@ -28,10 +29,7 @@ class BasicTextTokenizer():
     return "".join([self.to_decode_ct[token] for token in tokens])
 
   def vocab_size(self) -> int:
-    return len(self.to_decode_ct)
-  
-  def size(self):
-    return len(self.to_decode_ct)    
+    return self.size   
 
 
 if __name__ == "__main__":

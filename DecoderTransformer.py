@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-device = 'cpu'
 dropout = 0.2
 n_embd = 64
 nb_head = 4
@@ -30,7 +29,7 @@ class DecoderTransformer(nn.Module):
     B,T = idx.shape
 
     tok_emb = self.token_embeding_table(idx)
-    pos_emb = self.position_embedding_table(torch.arange(T, device=device))
+    pos_emb = self.position_embedding_table(torch.arange(T, device=idx.get_device()))
     x = tok_emb + pos_emb
     
     x = self.blocks(x)
@@ -113,7 +112,7 @@ class Head(nn.Module):
 
     wei = q @ k.transpose(-2, -1) # compatibiliy between tokens  (B,T,T)
     wei = wei / C**0.5  # prevent softmax to converge to one hot
-    tril = torch.tril(torch.ones(T,T))
+    tril = torch.tril(torch.ones(T,T,device=x.get_device()))
     wei = wei.masked_fill(tril==0, float('-inf')) # force to know only about past tokens (decoder block)
     wei = F.softmax(wei, dim=-1) # interaction strength between tokens
 
