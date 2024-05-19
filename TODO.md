@@ -28,7 +28,7 @@
 - Document code :black_square_button:
 	- BitePairEncoding :heavy_check_mark:
 	- Data :heavy_check_mark:
-	- Loss :black_square_button:
+	- Loss :heavy_check_mark:
 	- LTrainer :black_square_button:
 	- Tokenizer :black_square_button:
 
