@@ -3,8 +3,8 @@ import torch.nn as nn
 from torch.nn import functional as F
 
 dropout = 0.2
-n_embd = 64
-nb_head = 4
+n_embd = 384
+nb_head = 6
 
 
 

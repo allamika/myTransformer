@@ -21,16 +21,20 @@ class Data():
         self.train_data = self.data[:n]
         self.test_data = self.data[n:]
 
-    def getDataLoaders(self, block_size,  ratioTT = 0.9, cut=1):
+    def getDataLoaders(self, block_size, batch_size,  ratioTT = 0.9, ratioTV = 0.9, cut=1):
         print("---Creating DataLoaders---")
         
-        data_train = self.data[:int(len(self.data)*ratioTT)]
         data_test = self.data[int(len(self.data)*ratioTT):]
+        data_train = self.data[:int(len(self.data)*ratioTT)]
+
+        data_valid = self.data[int(len(data_train)*ratioTV):]
+        data_train = self.data[:int(len(data_train)*ratioTV)]
 
         data_train_block = [(data_train[i:i+block_size], data_train[i+1:i+block_size+1]) for i in tqdm(range(int(len(data_train)*cut)-block_size-1))]
+        data_valid_block = [(data_valid[i:i+block_size], data_valid[i+1:i+block_size+1]) for i in tqdm(range(int(len(data_valid)*cut)-block_size-1))]
         data_test_block = [(data_test[i:i+block_size], data_test[i+1:i+block_size+1]) for i in tqdm(range(int(len(data_test)*cut)-block_size-1))]
 
-        return DataLoader(data_train_block), DataLoader(data_test_block) #, num_workers=4, persistent_workers=True
+        return DataLoader(data_train_block, batch_size=batch_size), DataLoader(data_valid_block, batch_size=batch_size), DataLoader(data_test_block, batch_size=batch_size) #, num_workers=4, persistent_workers=True
     
     def get_batch(self, data, batch_size, block_size):
         if data == "train": data = self.train_data
