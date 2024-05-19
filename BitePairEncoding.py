@@ -2,7 +2,9 @@ import collections
 from tqdm import tqdm
 
 
-
+#excute bite pair encoding algorithm on tokenized_text.
+#num_reduction is the number of redution to execute anc total_token is the current size of the vocabulary
+#the function return as a tuple(the encoded text, a list of created reduction rule: list<tuple(int,tuple(int,int))>)
 def bite_pair_encoding(tokenized_text, num_reduction, total_token):
   tokenized_text = tokenized_text.copy()
   reduction_rules = []
@@ -13,6 +15,7 @@ def bite_pair_encoding(tokenized_text, num_reduction, total_token):
     tokenized_text = apply_rule(tokenized_text, target_rule)
   return tokenized_text, reduction_rules
 
+#return as a tuple(token,token) for the most frequent following pair of token in tokenized_text
 def max_pair(tokenized_text):
   pairs = {}
   for pair in zip(tokenized_text[:-1],tokenized_text[1:]):
@@ -20,6 +23,7 @@ def max_pair(tokenized_text):
   max_pair = max(pairs, key=pairs.get)
   return max_pair
 
+#return tokenized_text with target_rule of reduction applied on it
 def apply_rule(tokenized_text, target_rule):
   for i in range(len(tokenized_text)-1):
     if (tokenized_text[i], tokenized_text[i+1]) == target_rule[0]:
@@ -28,6 +32,7 @@ def apply_rule(tokenized_text, target_rule):
   
   return list(filter(lambda x : x != float('inf'), tokenized_text))
 
+#return tokenized_text with target_rule of reduction unapplied on it
 def unapply_rule(tokenized_text, target_rule):
   i=0
   result_text=[]
@@ -39,6 +44,7 @@ def unapply_rule(tokenized_text, target_rule):
       
   return result_text
 
+#return tokenized_text with a list of reduction_rules applied on it
 def encode_pair_bite(tokenized_text, reduction_rules):
   tokenized_text = tokenized_text.copy()
   reduction_rules = sorted(reduction_rules,key= lambda x: max(x[0][0], x[0][1]))
@@ -46,6 +52,7 @@ def encode_pair_bite(tokenized_text, reduction_rules):
     tokenized_text = apply_rule(tokenized_text, rule)
   return tokenized_text
 
+#return tokenized_text with a list of reduction_rules unapplied on it
 def decode_pair_bite(tokenized_text, reduction_rules):
   reduction_rules = sorted(reduction_rules,key= lambda x: x[1], reverse=True)
   for rule in reduction_rules:
