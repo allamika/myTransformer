@@ -5,12 +5,15 @@
 	 	- Bigram :heavy_check_mark:
 		- Transformer :heavy_check_mark:
 		- generic lightning trainer :heavy_check_mark:
-	- train and test split :heavy_check_mark:
-	- Record metric during training :heavy_check_mark:
-	- Model/Training Namining/Versionning :heavy_check_mark:
-	- Convention de nomage pour le version des modèles :black_square_button:
-	- Dynamique Model/Training Namining/Versionning :black_square_button:
-	- Model save end training :black_square_button:
+	- Nomage et sauvegarde des Models :heavy_check_mark:
+		- Model/Training Namining/Versionning :heavy_check_mark:
+		- Convention de nomage pour le version des modèles :heavy_check_mark:
+		- Dynamique Model/Training Namining/Versionning :heavy_check_mark:
+	- Gestion des entrainements :black_square_button:
+		- train and test split :heavy_check_mark:
+		- Record metric during training :heavy_check_mark:
+		- Model save end training :black_square_button:
+	
 	- Pass forward avec model entrainé et sauvegardé :black_square_button:
 	- Training record :black_square_button:
 - Training GPU :heavy_check_mark:

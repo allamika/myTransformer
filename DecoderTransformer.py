@@ -5,12 +5,13 @@ from torch.nn import functional as F
 dropout = 0.2
 n_embd = 384
 nb_head = 6
+block_size = 32
 
 
 
 class DecoderTransformer(nn.Module):
 
-  def __init__(self, vocab_size, block_size):
+  def __init__(self, vocab_size, block_size, n_embd, nb_head):
     super().__init__()
     self.block_size = block_size
     self.token_embeding_table = nn.Embedding(vocab_size, n_embd)
@@ -130,7 +131,7 @@ if __name__ == "__main__":
     data = Data()
     tokenizer = data.tokenizer
     
-    m = DecoderTransformer(tokenizer.vocab_size(), 32)
+    m = DecoderTransformer(tokenizer.vocab_size, block_size, n_embd, nb_head)
 
     idx = torch.zeros((1,1), dtype = torch.int64)
     gen_token = m.generate(idx, 10)
