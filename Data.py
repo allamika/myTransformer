@@ -5,7 +5,7 @@ from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
 
-
+# Class loading mini tiny_shakespeare dataset encode/tokenize it and create dataloaders
 class Data():
     def __init__(self, ration = 0.9, bite_pair_encoding=0):
         print("---Data loading---")
@@ -21,7 +21,11 @@ class Data():
         self.train_data = self.data[:n]
         self.test_data = self.data[n:]
 
-    def getDataLoaders(self, block_size, batch_size,  ratioTT = 0.9, ratioTV = 0.9, cut=1):
+    #return train, validation and test dataloader
+    #ratioTT is the ratio btw the size of train+validation and test
+    #ratioTT is the ratio btw the size of train and validation
+    #cut the ratio of a partial use of the dataset
+    def getDataLoaders(self, block_size, batch_size, ratioTT = 0.9, ratioTV = 0.9, cut=1):
         print("---Creating DataLoaders---")
         
         data_test = self.data[int(len(self.data)*ratioTT):]
@@ -36,6 +40,7 @@ class Data():
 
         return DataLoader(data_train_block, batch_size=batch_size), DataLoader(data_valid_block, batch_size=batch_size), DataLoader(data_test_block, batch_size=batch_size) #, num_workers=4, persistent_workers=True
     
+    # return a random batch from the dataset
     def get_batch(self, data, batch_size, block_size):
         if data == "train": data = self.train_data
         else: data = self.test_data

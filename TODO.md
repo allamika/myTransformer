@@ -27,8 +27,11 @@
 
 - Document code :black_square_button:
 	- BitePairEncoding :heavy_check_mark:
-	- Data :black_square_button:
+	- Data :heavy_check_mark:
+	- Loss :black_square_button:
 	- LTrainer :black_square_button:
 	- Tokenizer :black_square_button:
 
 - Ajout mixture of expert :black_square_button:
+
+- Integation MLflow :black_square_button:
