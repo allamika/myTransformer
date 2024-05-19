@@ -29,7 +29,7 @@
 	- BitePairEncoding :heavy_check_mark:
 	- Data :heavy_check_mark:
 	- Loss :heavy_check_mark:
-	- LTrainer :black_square_button:
+	- LTrainer :heavy_check_mark:
 	- Tokenizer :black_square_button:
 
 - Ajout mixture of expert :black_square_button:
