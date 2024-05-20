@@ -4,11 +4,12 @@ from lightning.pytorch import loggers as pl_loggers
 
 import Loss
 
+
 class LiLanguageModel(L.LightningModule):
-  def __init__(self, LM, lr):
+  def __init__(self, LM):
     super().__init__()
+    self.save_hyperparameters()
     self.LM = LM
-    self.lr = lr
 
   def training_step(self, batch):
     x,y = batch
@@ -30,11 +31,13 @@ class LiLanguageModel(L.LightningModule):
     test_loss = Loss.eval_loss(out, y)
     self.log("validation_loss", test_loss)
 
-
-
   def configure_optimizers(self):
-    optimizer = torch.optim.AdamW(self.LM.parameters(), lr=self.lr)
+    optimizer = torch.optim.AdamW(self.LM.parameters(), lr=1e-3)
     return optimizer
+  
+  def generate(self,idx, max_new_tokens):
+    return self.LM.generate(idx, max_new_tokens)
+    
   
 
 if __name__  == "__main__":
@@ -48,16 +51,17 @@ if __name__  == "__main__":
     n_embd = 384
     nb_head = 6
     lr = 1e-3
-    cut = 0.1
+    cut = 1
+    nbReduction = 0
 
-    data = Data()
+    data = Data(bite_pair_encoding=nbReduction)
     tokenizer = data.tokenizer
     dataLoaderTrain, dataLoaderValid, dataLoaderTest = data.getDataLoaders(block_size, batch_size, cut=cut)    
     
     lm = DecoderTransformer(tokenizer.vocab_size(), block_size, n_embd, nb_head)
-    lilm = LiLanguageModel(lm, lr)
+    lilm = LiLanguageModel(lm)
 
-    versionName = f'DT_b{block_size}e{n_embd}h{nb_head}_T_b{batch_size}lr{lr}_D_c{cut}_Ti_{time}'
+    versionName = f'DT_b{block_size}e{n_embd}h{nb_head}_T_b{batch_size}lr{lr}_D_c{cut}r{nbReduction}_Ti_{time}'
     logger = pl_loggers.TensorBoardLogger(save_dir=".", version=versionName, name='lightning_logs')
 
     trainer = L.Trainer(logger=logger, max_epochs=10, accelerator="auto", devices="auto", enable_checkpointing=True)

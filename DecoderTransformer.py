@@ -28,9 +28,8 @@ class DecoderTransformer(nn.Module):
 
   def forward(self, idx):
     B,T = idx.shape
-
     tok_emb = self.token_embeding_table(idx)
-    pos_emb = self.position_embedding_table(torch.arange(T, device=idx.get_device()))
+    pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device))
     x = tok_emb + pos_emb
     
     x = self.blocks(x)
@@ -49,7 +48,7 @@ class DecoderTransformer(nn.Module):
       next_token = torch.multinomial(probs, 1)
       #add the token to the generation
       idx = torch.cat((idx, next_token), dim=1)
-    return idx
+    return idx[0]
 
 
 class Block(nn.Module):
@@ -113,7 +112,7 @@ class Head(nn.Module):
 
     wei = q @ k.transpose(-2, -1) # compatibiliy between tokens  (B,T,T)
     wei = wei / C**0.5  # prevent softmax to converge to one hot
-    tril = torch.tril(torch.ones(T,T,device=x.get_device()))
+    tril = torch.tril(torch.ones(T,T,device=x.device))
     wei = wei.masked_fill(tril==0, float('-inf')) # force to know only about past tokens (decoder block)
     wei = F.softmax(wei, dim=-1) # interaction strength between tokens
 
@@ -131,9 +130,9 @@ if __name__ == "__main__":
     data = Data()
     tokenizer = data.tokenizer
     
-    m = DecoderTransformer(tokenizer.vocab_size, block_size, n_embd, nb_head)
+    m = DecoderTransformer(tokenizer.vocab_size(), block_size, n_embd, nb_head)
 
     idx = torch.zeros((1,1), dtype = torch.int64)
-    gen_token = m.generate(idx, 10)
-    gen_text = tokenizer.decode(gen_token[0])
-    print(gen_text)
+    gen_token = m.generate(idx, 100)
+    gen_text = tokenizer.decode(gen_token)
+    print(gen_token)
