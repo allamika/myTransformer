@@ -12,11 +12,11 @@ tokenizer = data.tokenizer
 
 
 lr = 1e-4
-total_batch = 50000
+total_batch = 500
 batch_size = 64
 block_size = 16
 
-m = DecoderTransformer(tokenizer.vocab_size()+bite_pair_encoding, block_size)
+m = DecoderTransformer(tokenizer.vocab_size(), block_size)
 
 train(m, data, lr = lr, total_batch=total_batch,  batch_size=batch_size, block_size=block_size)
 

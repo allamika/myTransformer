@@ -2,16 +2,16 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-device = 'cpu'
 dropout = 0.2
-n_embd = 64
-nb_head = 4
+n_embd = 384
+nb_head = 6
+block_size = 32
 
 
 
 class DecoderTransformer(nn.Module):
 
-  def __init__(self, vocab_size, block_size):
+  def __init__(self, vocab_size, block_size, n_embd, nb_head):
     super().__init__()
     self.block_size = block_size
     self.token_embeding_table = nn.Embedding(vocab_size, n_embd)
@@ -22,15 +22,18 @@ class DecoderTransformer(nn.Module):
         Block(n_embd, n_head=nb_head),
         Block(n_embd, n_head=nb_head),
         Block(n_embd, n_head=nb_head),
+        Block(n_embd, n_head=nb_head),
+        Block(n_embd, n_head=nb_head),
+        Block(n_embd, n_head=nb_head),
+        Block(n_embd, n_head=nb_head),
         Block(n_embd, n_head=nb_head)
     )
     self.lm_head = nn.Linear(n_embd, vocab_size)
 
   def forward(self, idx):
     B,T = idx.shape
-
     tok_emb = self.token_embeding_table(idx)
-    pos_emb = self.position_embedding_table(torch.arange(T, device=device))
+    pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device))
     x = tok_emb + pos_emb
     
     x = self.blocks(x)
@@ -49,7 +52,7 @@ class DecoderTransformer(nn.Module):
       next_token = torch.multinomial(probs, 1)
       #add the token to the generation
       idx = torch.cat((idx, next_token), dim=1)
-    return idx
+    return idx[0]
 
 
 class Block(nn.Module):
@@ -113,7 +116,7 @@ class Head(nn.Module):
 
     wei = q @ k.transpose(-2, -1) # compatibiliy between tokens  (B,T,T)
     wei = wei / C**0.5  # prevent softmax to converge to one hot
-    tril = torch.tril(torch.ones(T,T))
+    tril = torch.tril(torch.ones(T,T,device=x.device))
     wei = wei.masked_fill(tril==0, float('-inf')) # force to know only about past tokens (decoder block)
     wei = F.softmax(wei, dim=-1) # interaction strength between tokens
 
@@ -131,9 +134,9 @@ if __name__ == "__main__":
     data = Data()
     tokenizer = data.tokenizer
     
-    m = DecoderTransformer(tokenizer.vocab_size(), 32)
+    m = DecoderTransformer(tokenizer.vocab_size(), block_size, n_embd, nb_head)
 
     idx = torch.zeros((1,1), dtype = torch.int64)
-    gen_token = m.generate(idx, 10)
-    gen_text = tokenizer.decode(gen_token[0])
-    print(gen_text)
+    gen_token = m.generate(idx, 100)
+    gen_text = tokenizer.decode(gen_token)
+    print(gen_token)

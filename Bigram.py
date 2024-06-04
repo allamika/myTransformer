@@ -2,8 +2,6 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-import Loss
-
 class BigramLanguageModel(nn.Module):
 
   def __init__(self, vocab_size):
@@ -23,18 +21,19 @@ class BigramLanguageModel(nn.Module):
       #select the token using proba
       next_token = torch.multinomial(probs, 1)
       #add the token to the generation
-      idx = torch.concatenate((idx, next_token))
+      idx = torch.cat((idx, next_token))
     return idx.squeeze(1)
 
 if __name__ == "__main__":
-    from Data import Data
-    data = Data()
-    tokenizer = data.tokenizer
+  from Data import Data
+  data = Data()
+  tokenizer = data.tokenizer
     
-    m = BigramLanguageModel(tokenizer.vocab_size())
-    print(Loss.estimate_loss(m, data))
+  m = BigramLanguageModel(tokenizer.vocab_size())
     
-    idx = torch.zeros((1,1), dtype = torch.int64)
-    gen_token = m.generate(idx, 100)
-    gen_text = tokenizer.decode(gen_token)
-    print(gen_text)
+  idx = torch.zeros((1,1), dtype = torch.int64)
+  gen_token = m.generate(idx, 100)
+  gen_text = tokenizer.decode(gen_token)
+  print(gen_text)
+
+    
