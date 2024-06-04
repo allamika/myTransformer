@@ -7,19 +7,15 @@ from torch.utils.data import DataLoader
 
 # Class loading mini tiny_shakespeare dataset encode/tokenize it and create dataloaders
 class Data():
-    def __init__(self, ration = 0.9, bite_pair_encoding=0):
+    def __init__(self, bite_pair_encoding=0):
         print("---Data loading---")
         with open('input.txt', 'r', encoding='utf-8') as f:
-            text = f.read()
-            text = text[:int(len(text)*0.1)]
+            text = f.read() 
             
         self.tokenizer = BasicTextTokenizer(text, bite_pair_encoding)
         
         print("---Data Encoding---")
         self.data = self.tokenizer.encode(text)
-        n = int(len(self.data)*ration)
-        self.train_data = self.data[:n]
-        self.test_data = self.data[n:]
 
     #return train, validation and test dataloader
     #ratioTT is the ratio btw the size of train+validation and test

@@ -24,6 +24,8 @@ class DecoderTransformer(nn.Module):
         Block(n_embd, n_head=nb_head),
         Block(n_embd, n_head=nb_head),
         Block(n_embd, n_head=nb_head),
+        Block(n_embd, n_head=nb_head),
+        Block(n_embd, n_head=nb_head),
         Block(n_embd, n_head=nb_head)
     )
     self.lm_head = nn.Linear(n_embd, vocab_size)

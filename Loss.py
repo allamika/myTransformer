@@ -19,6 +19,5 @@ def eval_batch_loss(model, batch):
 
 #return the cross_entropy loss of the model btw the two inputs, out and yb
 def eval_loss(out, yb):
-  out = out.transpose(1,2)
   loss = F.cross_entropy(out, yb)
   return loss
